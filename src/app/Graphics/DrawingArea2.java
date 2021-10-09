@@ -123,7 +123,7 @@ public class DrawingArea2 {
         BufferedImage imgs = new BufferedImage(
                 icor.getIconWidth() / pixel_size,
                 icor.getIconHeight() / pixel_size,
-                BufferedImage.TYPE_INT_RGB);
+                BufferedImage.TYPE_INT_ARGB);
         Graphics g = imgs.createGraphics();
         icor.paintIcon(null, g, 0, 0);
         g.dispose();
@@ -143,7 +143,7 @@ public class DrawingArea2 {
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 Color c = new Color(0, 0, 0, 0);
-                out.setRGB(j, i, c.getRGB());
+                out.setRGB(j, i, 0);
             }
         }
         return out;

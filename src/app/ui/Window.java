@@ -16,7 +16,6 @@ public class Window extends JFrame {
     public JMenu edit_menu = new JMenu("Edit");
 
     public JMenuItem _undo = new JMenuItem("Undo");
-    public JMenuItem _redo = new JMenuItem("Redo");
 
     public Window(){
         super("PSharp");
@@ -32,7 +31,6 @@ public class Window extends JFrame {
         bar.add(edit_menu);
 
         edit_menu.add(_undo);
-        edit_menu.add(_redo);
 
         _undo.setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
         _undo.addActionListener(new ActionListener() {
@@ -41,6 +39,7 @@ public class Window extends JFrame {
                 Core.undo();
             }
         });
+
         view = new AppView();
         this.setContentPane(view);
     }
