@@ -14,6 +14,7 @@ public class ColorChooser {
     static Color out;
     public static void open(){
         window = new JFrame("Color Chooser");
+        window.setIconImage(new ImageIcon("icons\\icon.png").getImage());
         window.setVisible(true);
         window.setSize(600,450);
         window.setLocationRelativeTo(null);

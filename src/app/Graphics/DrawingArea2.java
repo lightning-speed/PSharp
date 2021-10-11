@@ -4,6 +4,7 @@ import app.Main;
 import app.core.Core;
 import app.io.ImageReader;
 import app.io.ImageWriter;
+import app.ui.AppView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,8 @@ public class DrawingArea2 {
     public static JPanel drawing_panel;
     public static int pixel_size = 15;
     public static int Iheight, Iwidth;
-    public static Color PointerColor = Color.BLACK;
+    public static String FileName;
+    public static Color PointerColor = Color.WHITE;
     public static Pixel[][] pixles;
     public JLabel img;
 
@@ -69,6 +71,7 @@ public class DrawingArea2 {
     }
 
     public void load_image(String path) {
+        FileName = path;
         int[][][] in = ImageReader.read(path);
         int h = in.length, w = in[0].length;
         pixles = new Pixel[h][w];
@@ -121,8 +124,8 @@ public class DrawingArea2 {
     public void drawImage() {
         ImageIcon icor = (ImageIcon) img.getIcon();
         BufferedImage imgs = new BufferedImage(
-                icor.getIconWidth() / pixel_size,
-                icor.getIconHeight() / pixel_size,
+                Iwidth,
+                Iheight,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics g = imgs.createGraphics();
         icor.paintIcon(null, g, 0, 0);
@@ -153,41 +156,53 @@ public class DrawingArea2 {
         drawing_panel.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
-                drawImage();
+                if(e.getX()>-1&&e.getX()<490&&e.getY()>-1&&e.getY()<490) {
+                    if(AppView.pen.isSelected())
+                        pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
+                    else
+                        pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(new Color(0,0,0,0));
+
+                    drawImage();
+                }
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
             }
         });
-        drawing_panel.addMouseListener(new MouseListener() {
+        new Thread(new Runnable() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
-                drawImage();
+            public void run() {
+                drawing_panel.addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
+                        drawImage();
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        Core.add_move();
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+
+                    }
+                });
             }
+        }).start();
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                Core.add_move();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
 
     }
     public void activatUpdate(){
@@ -201,8 +216,9 @@ public class DrawingArea2 {
             }
         }).start();
     }
-    public void zoom(int pixelSize){
-        pixel_size = pixelSize;
-        drawImage();
+    public void zoom(int pixelS){
+        pixel_size = pixelS;
+        img.setBounds(0,0,Iwidth*pixel_size,Iheight*pixel_size);
+        drawing_panel.setPreferredSize(new Dimension(Iwidth * pixel_size, Iheight * pixel_size));
     }
 }

@@ -16,10 +16,11 @@ public class Window extends JFrame {
     public JMenu edit_menu = new JMenu("Edit");
 
     public JMenuItem _undo = new JMenuItem("Undo");
+    public JMenuItem _save = new JMenuItem("Save");
 
     public Window(){
         super("PSharp");
-        this.setIconImage(new ImageIcon("a.png").getImage());
+        this.setIconImage(new ImageIcon("icons\\icon.png").getImage());
         this.setSize(900,650);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -31,12 +32,21 @@ public class Window extends JFrame {
         bar.add(edit_menu);
 
         edit_menu.add(_undo);
+        file_menu.add(_save);
 
         _undo.setAccelerator(KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK));
+        _save.setAccelerator(KeyStroke.getKeyStroke('S', InputEvent.CTRL_DOWN_MASK));
+
         _undo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Core.undo();
+            }
+        });
+        _save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Core.save();
             }
         });
 

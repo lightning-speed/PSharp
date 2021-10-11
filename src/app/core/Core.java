@@ -2,9 +2,11 @@ package app.core;
 
 import app.Graphics.DrawingArea2;
 import app.Graphics.Pixel;
+import app.io.ImageWriter;
 import app.ui.AppView;
 
 import java.awt.*;
+import java.net.FileNameMap;
 
 public class Core {
   static int pixels[][][] = new int[50][1000][1000];
@@ -30,5 +32,8 @@ public class Core {
       }
      }
     }
+  }
+  public static void save(){
+    AppView.drawingArea.saveAsImg(DrawingArea2.FileName);
   }
 }
