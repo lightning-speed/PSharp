@@ -15,10 +15,14 @@ public class AppView extends JPanel {
     public static JButton colorChooserBtn = new JButton(" ");
     public static JToggleButton pen = new JToggleButton(new ImageIcon("icons\\pen.png"));
     public static JToggleButton erase = new JToggleButton(new ImageIcon("icons\\erase.png"));
+    public static JButton rotate = new JButton(new ImageIcon("icons\\rotate.png"));
     public static JSlider zoom = new JSlider();
     public AppView(){
         this.setLayout(null);
-
+        colorChooserBtn.setToolTipText("Choose Color");
+        pen.setToolTipText("Pen");
+        erase.setToolTipText("Eraser");
+        rotate.setToolTipText("Rotate");
         tb.setBounds(0,0,800,30);
         tb.setFloatable(false);
 
@@ -56,9 +60,27 @@ public class AppView extends JPanel {
                 }
             }
         });
-        drawingArea = new DrawingArea2(500,500);
+        tb.add(rotate);
+        rotate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				drawingArea.rotate();
+			}});
+        drawingArea = new DrawingArea2(60,57);
         zoom.setBounds(200,580,300,30);
-        zoom.setMaximum(5000/drawingArea.Iwidth);
+        if(drawingArea.Iwidth>=500)
+           zoom.setMaximum(2);
+        if(drawingArea.Iwidth<=300)
+            zoom.setMaximum(5);
+        if(drawingArea.Iwidth<=200)
+            zoom.setMaximum(7);
+        if(drawingArea.Iwidth<=100)
+           zoom.setMaximum(10);
+        if(drawingArea.Iwidth<=60)
+            zoom.setMaximum(15);
+        zoom.setMaximum(drawingArea.pixel_size);
+        zoom.setToolTipText("Zoom");
         zoom.setMinimum(1);
         zoom.setValue(5);
         zoom.addChangeListener(new ChangeListener() {
@@ -74,7 +96,7 @@ public class AppView extends JPanel {
             public void run() {
                 try {
                     Thread.sleep(100);
-                    drawingArea.load_image("icon.png");
+                    drawingArea.load_image("icons\\icon.png");
                     add_c(drawingArea.getArea(), 200, 75, 500, 500);
                 }catch (Exception e){}
             }

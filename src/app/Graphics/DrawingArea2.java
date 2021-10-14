@@ -18,7 +18,7 @@ public class DrawingArea2 {
     public static int Iheight, Iwidth;
     public static String FileName;
     public static Color PointerColor = Color.WHITE;
-    public static Pixel[][] pixles;
+    public static Pixel[][] pixels;
     public JLabel img;
 
     public DrawingArea2(int width, int height) {
@@ -74,11 +74,11 @@ public class DrawingArea2 {
         FileName = path;
         int[][][] in = ImageReader.read(path);
         int h = in.length, w = in[0].length;
-        pixles = new Pixel[h][w];
+        pixels = new Pixel[h][w];
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                pixles[i][j] = new Pixel();
-                pixles[i][j].setBackground(new Color(in[i][j][0], in[i][j][1], in[i][j][2], in[i][j][3]));
+                pixels[i][j] = new Pixel();
+                pixels[i][j].setBackground(new Color(in[i][j][0], in[i][j][1], in[i][j][2], in[i][j][3]));
 
             }
         }
@@ -92,12 +92,12 @@ public class DrawingArea2 {
 
     public void createArea(int width, int height) {
         int h = height, w = width;
-        pixles = new Pixel[h][w];
+        pixels = new Pixel[h][w];
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                pixles[i][j] = new Pixel();
+                pixels[i][j] = new Pixel();
                 Color c = new Color(0, 0,  0, 0);
-                pixles[i][j].setBackground(c);
+                pixels[i][j].setBackground(c);
             }
         }
         ImageIcon ico = new ImageIcon(new ImageIcon(emptyImage(w, h)).getImage().getScaledInstance( Iwidth*pixel_size, Iheight*pixel_size, Image.SCALE_DEFAULT));
@@ -111,10 +111,10 @@ public class DrawingArea2 {
         int[][][] out = new int[Iheight][Iwidth][4];
         for (int i = 0; i < Iheight; i++) {
             for (int j = 0; j < Iwidth; j++) {
-                out[i][j][0] = pixles[i][j].getBackground().getRed();
-                out[i][j][1] = pixles[i][j].getBackground().getGreen();
-                out[i][j][2] = pixles[i][j].getBackground().getBlue();
-                out[i][j][3] = pixles[i][j].getBackground().getAlpha();
+                out[i][j][0] = pixels[i][j].getBackground().getRed();
+                out[i][j][1] = pixels[i][j].getBackground().getGreen();
+                out[i][j][2] = pixels[i][j].getBackground().getBlue();
+                out[i][j][3] = pixels[i][j].getBackground().getAlpha();
 
             }
         }
@@ -132,7 +132,7 @@ public class DrawingArea2 {
         g.dispose();
         for (int i = 0; i < Iheight; i++) {
             for (int j = 0; j < Iwidth; j++) {
-                imgs.setRGB(j, i, pixles[i][j].getBackground().getRGB());
+                imgs.setRGB(j, i, pixels[i][j].getBackground().getRGB());
             }
         }
         ImageIcon ico = new ImageIcon(new ImageIcon(imgs).getImage().getScaledInstance(pixel_size*Iwidth, pixel_size*Iheight, Image.SCALE_DEFAULT));
@@ -158,9 +158,9 @@ public class DrawingArea2 {
             public void mouseDragged(MouseEvent e) {
                 if(e.getX()>-1&&e.getX()<490&&e.getY()>-1&&e.getY()<490) {
                     if(AppView.pen.isSelected())
-                        pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
+                        pixels[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
                     else
-                        pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(new Color(0,0,0,0));
+                        pixels[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(new Color(0,0,0,0));
 
                     drawImage();
                 }
@@ -176,7 +176,7 @@ public class DrawingArea2 {
                 drawing_panel.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        pixles[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
+                        pixels[e.getY() / pixel_size][e.getX() / pixel_size].setBackground(PointerColor);
                         drawImage();
                     }
 
@@ -220,5 +220,22 @@ public class DrawingArea2 {
         pixel_size = pixelS;
         img.setBounds(0,0,Iwidth*pixel_size,Iheight*pixel_size);
         drawing_panel.setPreferredSize(new Dimension(Iwidth * pixel_size, Iheight * pixel_size));
+    }
+    public void rotate() {
+    	Core.add_move();
+    	Pixel Temp[][] = pixels;
+    	int temp = Iheight;
+    	Iheight = Iwidth;
+    	Iwidth = temp;
+    	   img.setBounds(0,0,Iwidth*pixel_size,Iheight*pixel_size);
+           drawing_panel.setPreferredSize(new Dimension(Iwidth * pixel_size, Iheight * pixel_size));
+    	pixels = new Pixel[Iheight][Iwidth];
+    	for(int i = 0;i<Iwidth;i++) {
+    		for(int j = 0;j<Iheight;j++) {
+    			pixels[(Iheight-1)-j][(Iwidth-1)-i] = Temp[(Iwidth-1)-i][j];
+    		}
+    	}
+    	
+    	drawImage();
     }
 }

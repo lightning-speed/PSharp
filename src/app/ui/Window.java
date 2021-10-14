@@ -21,7 +21,7 @@ public class Window extends JFrame {
     public Window(){
         super("PSharp");
         this.setIconImage(new ImageIcon("icons\\icon.png").getImage());
-        this.setSize(900,650);
+        this.setSize(900,687);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
@@ -55,6 +55,6 @@ public class Window extends JFrame {
     }
     public void refresh(){
         this.setSize(900,651);
-        this.setSize(900,650);
+        this.setSize(900,687);
     }
 }
